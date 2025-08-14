@@ -29,9 +29,50 @@ export class Gemini implements INodeType {
             {
                 name: 'geminiApi',
                 required: true,
-            },
+            }
         ],
         properties: [
+            {
+                displayName: 'Round Robin Keys',
+                name: 'roundRobinKeys',
+                type: 'boolean',
+                default: false,
+            },
+            {
+                displayName: 'Additional API Keys',
+                name: 'additionalKeys',
+                type: 'fixedCollection',
+                placeholder: 'Add API key',
+                typeOptions: {
+                    multipleValues: true,
+                },
+                displayOptions: {
+                    show: {
+                        roundRobinKeys: [true],
+                    }
+                },
+                options: [
+                    {
+                        displayName: 'Key',
+                        name: 'keys',
+                        values: [
+                            {
+                                displayName: 'API Key',
+                                name: 'key',
+                                type: 'string',
+                                typeOptions: {
+                                    password: true,
+                                },
+                                default: '',
+                                description: 'An additional API key to use with the Gemini API'
+                            }
+                        ]
+                    }
+                ],
+                default: {
+                    keys: []
+                },
+            },
             {
                 displayName: 'Resource',
                 name: 'resource',
@@ -377,7 +418,8 @@ export class Gemini implements INodeType {
                     value: model
                 }))
             }
-        }
+        },
+
     }
 
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {

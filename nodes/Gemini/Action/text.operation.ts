@@ -10,13 +10,24 @@ export async function execute(
     const simplifyOutput = this.getNodeParameter('simplifyOutput', 0) as boolean;
     const options = this.getNodeParameter('options', 0) as Record<string, any>;
     const messages = this.getNodeParameter('messages', 0) as { message: { role: 'user' | 'model', prompt: string }[] };
+    const roundRobinKeys = this.getNodeParameter('roundRobinKeys', 0) as boolean;
+    let keys: string[] = [];
+
+    if (roundRobinKeys) {
+        const additionalKeys = this.getNodeParameter('additionalKeys', 0) as { keys: { key: string }[] };
+        keys = (additionalKeys.keys || []).map((k) => k.key);
+    }
+
+    keys.push(credentials.apiKey);
 
     const contents: Content[] = (messages.message || []).map(item => ({
         role: item.role,
         parts: [{ text: item.prompt }]
-    }))
+    }))    
 
-    const genAI = new GoogleGenAI({ apiKey: credentials.apiKey });
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    this.logger.debug(`Using API key: ${randomKey.slice(0,4)}...${randomKey.slice(-4)} for model: ${model}`)
+    const genAI = new GoogleGenAI({ apiKey: randomKey });
     const genConfig = {
         model: model,
         contents: contents,
