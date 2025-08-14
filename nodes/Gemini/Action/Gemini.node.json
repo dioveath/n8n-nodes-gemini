@@ -1,0 +1,29 @@
+{
+	"node": "n8n-nodes-base.gemini",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Utility"],
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/dioveath/n8n-nodes-gemini"
+			},
+			{
+				"url": "https://ai.google.dev/gemini-api/docs"
+			}
+		]
+	},
+	"alias": [
+        "gemini",
+        "ai",
+        "genai",
+        "multiple credentials",
+        "google gemini",
+        "google ai",
+        "gemini flash",
+        "gemini pro",
+        "gemini multi key",
+        "gemini stable",
+        "gemini empty response fix"
+	]
+}

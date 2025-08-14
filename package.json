@@ -1,19 +1,35 @@
 {
-  "name": "n8n-nodes-gemini",
+  "name": "@raisaroj/n8n-nodes-gemini",
   "version": "0.1.0",
-  "description": "n8n nodes for Gemini",
+  "description": "n8n nodes for integrating Google Gemini AI with enhanced multi-API key support and empty response fix stability through retries.",
   "keywords": [
-    "n8n-community-node-package"
+    "n8n-community-node-package",
+    "gemini",
+    "google gemini",
+    "google genai",
+    "google ai",
+    "genai",
+    "google generative ai",
+    "gemini node",
+    "n8n gemini",
+    "n8n node",
+    "multi api keys",
+    "multiple api keys",
+    "gemini automation",
+    "gemini workflow"
   ],
   "license": "MIT",
-  "homepage": "",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/dioveath/n8n-nodes-gemini",
   "author": {
     "name": "rAi",
     "email": "raisaroj360@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+    "url": "https://github.com/dioveath/n8n-nodes-gemini.git"
   },
   "engines": {
     "node": ">=20.15"
@@ -34,12 +50,10 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ExampleCredentialsApi.credentials.js",
-      "dist/credentials/HttpBinApi.credentials.js"
+      "dist/credentials/GeminiApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/ExampleNode/ExampleNode.node.js",
-      "dist/nodes/HttpBin/HttpBin.node.js"
+      "dist/nodes/Gemini/Gemini.node.js"
     ]
   },
   "devDependencies": {
