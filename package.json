@@ -1,7 +1,7 @@
 {
-  "name": "n8n-nodes-<...>",
+  "name": "n8n-nodes-gemini",
   "version": "0.1.0",
-  "description": "Quick start for n8n community nodes with easy development flow with Docker compose setup.",
+  "description": "n8n nodes for Gemini",
   "keywords": [
     "n8n-community-node-package"
   ],
@@ -52,5 +52,8 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "@google/genai": "^1.14.0"
   }
 }
