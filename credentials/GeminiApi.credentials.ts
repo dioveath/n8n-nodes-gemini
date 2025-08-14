@@ -2,7 +2,8 @@ import { ICredentialType, INodeProperties } from "n8n-workflow";
 
 export class GeminiApi implements ICredentialType {
     name = 'geminiApi';
-    displayName = 'Gemini API Key';
+    displayName = 'GeminiAPI Key API';
+    documentationUrl = "https://ai.google.dev/gemini-api/docs";
     properties: INodeProperties[] = [
         {
             displayName: 'API Key',

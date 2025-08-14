@@ -99,7 +99,8 @@ export class Gemini implements INodeType {
                 options: [
                     {
                         name: 'Generate Text',
-                        value: 'generateText'
+                        value: 'generateText',
+                        action: 'Generate a text',
                     },
                 ],
                 displayOptions: {
@@ -108,7 +109,6 @@ export class Gemini implements INodeType {
                     }
                 },
                 default: 'generateText',
-                description: 'The operation to perform with the Gemini API',
             },
             {
                 displayName: 'Operation',
@@ -125,20 +125,20 @@ export class Gemini implements INodeType {
                         name: 'Generate Audio',
                         value: 'generateAudio',
                         displayName: 'Generate Audio',
+                        action: 'Generate an audio',
                     },
                 ],
                 default: 'generateAudio',
-                description: 'The operation to perform with the Gemini API',
             },
             {
-                displayName: 'Model',
+                displayName: 'Model Name or ID',
                 name: 'model',
                 type: 'options',
                 typeOptions: {
                     loadOptionsMethod: 'getModels'
                 },
-                default: 'gemini-2.0-flash',
-                description: 'The model to use with the Gemini API',
+                default: '',
+                description: 'The model to use with the Gemini API. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
             },
             {
                 displayName: 'Messages',
@@ -195,7 +195,7 @@ export class Gemini implements INodeType {
                                 },
                                 default: '',
                                 placeholder: 'What is the meaning of life?',
-                                description: 'The content of the message.',
+                                description: 'The content of the message',
                             }
                         ]
                     }
@@ -206,7 +206,7 @@ export class Gemini implements INodeType {
                 name: 'simplifyOutput',
                 type: 'boolean',
                 default: false,
-                description: 'Simplify the output to only return the text of the response.',
+                description: 'Whether to simplify the output to only return the text of the response',
             },
             {
                 displayName: 'Options',
@@ -215,6 +215,129 @@ export class Gemini implements INodeType {
                 placeholder: 'Add Option',
                 default: {},
                 options: [
+                    {
+                        displayName: 'Frequency Penalty',
+                        name: 'frequencyPenalty',
+                        type: 'number',
+                        default: 0,
+                        description: 'Penalizes repeated tokens in the response. Use a higher value to reduce the likelihood of repeated tokens.',
+                    },
+                    {
+                        displayName: 'Max Output Tokens',
+                        name: 'maxOutputTokens',
+                        type: 'number',
+                        default: 16384,
+                        description: 'The maximum number of tokens to generate in the response',
+                    },
+                    {
+                        displayName: 'Presence Penalty',
+                        name: 'presencePenalty',
+                        type: 'number',
+                        default: 0,
+                        description: 'Penalizes new tokens based on whether they appear in the text so far. Use a higher value to encourage the model to use new tokens.',
+                    },
+                    {
+                        displayName: 'Saftey Settings',
+                        name: 'safetySettings',
+                        type: 'fixedCollection',
+                        typeOptions: {
+                            multipleValues: true,
+                            sortable: true
+                        },
+                        placeholder: 'Add Safety Setting',
+                        description: 'Safety settings in the request to block unsafe content in the response',
+                        default: {},
+                        options: [
+                            {
+                                displayName: 'Safety Setting',
+                                name: 'settings',
+                                values: [
+                                    {
+                                        displayName: 'Harm Category',
+                                        name: 'category',
+                                        type: 'options',
+                                        options: [
+                                            {
+                                                name: "HARM_CATEGORY_CIVIC_INTEGRITY",
+                                                value: "HARM_CATEGORY_CIVIC_INTEGRITY",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                                value: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_HARASSMENT",
+                                                value: "HARM_CATEGORY_HARASSMENT",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_HATE_SPEECH",
+                                                value: "HARM_CATEGORY_HATE_SPEECH",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT",
+                                                value: "HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_IMAGE_HARASSMENT",
+                                                value: "HARM_CATEGORY_IMAGE_HARASSMENT",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_IMAGE_HATE",
+                                                value: "HARM_CATEGORY_IMAGE_HATE",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT",
+                                                value: "HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                                value: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                            },
+                                            {
+                                                name: "HARM_CATEGORY_UNSPECIFIED",
+                                                value: "HARM_CATEGORY_UNSPECIFIED",
+                                            }
+                                        ],
+                                        default: 'HARM_CATEGORY_UNSPECIFIED',
+                                        description: 'The category of the harm content that the model is protected against',
+                                    },
+                                    {
+                                        displayName: 'Harm Block Threshold',
+                                        name: 'threshold',
+                                        type: 'options',
+                                        options: [
+                                            {
+                                                name: 'BLOCK_LOW_AND_ABOVE',
+                                                value: 'BLOCK_LOW_AND_ABOVE',
+                                            },
+                                            {
+                                                name: 'BLOCK_MEDIUM_AND_ABOVE',
+                                                value: 'BLOCK_MEDIUM_AND_ABOVE',
+                                            },
+                                            {
+                                                name: 'BLOCK_NONE',
+                                                value: 'BLOCK_NONE',
+                                            },
+                                            {
+                                                name: 'BLOCK_ONLY_HIGH',
+                                                value: 'BLOCK_ONLY_HIGH',
+                                            },
+                                            {
+                                                name: 'HARM_BLOCK_THRESHOLD_UNSPECIFIED',
+                                                value: 'HARM_BLOCK_THRESHOLD_UNSPECIFIED',
+                                            },
+                                            {
+                                                name: 'OFF',
+                                                value: 'OFF',
+                                            }
+                                        ],
+                                        default: 'BLOCK_NONE',
+                                        description: 'The threshold for blocking content',
+                                    }
+                                ]
+                            }
+                        ]
+                    },
                     {
                         displayName: 'System Instruction',
                         name: 'systemInstruction',
@@ -237,41 +360,6 @@ export class Gemini implements INodeType {
                         },
                         default: 1,
                         description: 'Value that controls the degree of randomness in token selection. Lower temperatures are good for prompts that require a less open-ended or creative response, while higher temperatures can lead to more diverse or creative results.',
-                    },
-                    {
-                        displayName: 'Top P',
-                        name: 'topP',
-                        type: 'number',
-                        default: 1,
-                        description: 'Tokens are selected from the most to least probable until the sum of their probabilities equals this value. Use a lower value for less random responses and a higher value for more random responses.',
-                    },
-                    {
-                        displayName: 'Top K',
-                        name: 'topK',
-                        type: 'number',
-                        default: 1,
-                        description: 'For each token selection step, the ``top_k`` tokens with the highest probabilities are sampled. Then tokens are further filtered based on ``top_p`` with the final token selected using temperature sampling. Use a lower number for less random responses and a higher number for more random responses.',
-                    },
-                    {
-                        displayName: 'Max Output Tokens',
-                        name: 'maxOutputTokens',
-                        type: 'number',
-                        default: 16384,
-                        description: 'The maximum number of tokens to generate in the response',
-                    },
-                    {
-                        displayName: 'Frequency Penalty',
-                        name: 'frequencyPenalty',
-                        type: 'number',
-                        default: 0,
-                        description: 'Penalizes repeated tokens in the response. Use a higher value to reduce the likelihood of repeated tokens.',
-                    },
-                    {
-                        displayName: 'Presence Penalty',
-                        name: 'presencePenalty',
-                        type: 'number',
-                        default: 0,
-                        description: 'Penalizes new tokens based on whether they appear in the text so far. Use a higher value to encourage the model to use new tokens.',
                     },
                     {
                         displayName: 'Thinking Config',
@@ -303,106 +391,18 @@ export class Gemini implements INodeType {
                         ]
                     },
                     {
-                        displayName: 'Saftey Settings',
-                        name: 'safetySettings',
-                        type: 'fixedCollection',
-                        typeOptions: {
-                            multipleValues: true,
-                            sortable: true
-                        },
-                        placeholder: 'Add Safety Setting',
-                        description: 'Safety settings in the request to block unsafe content in the response.',
-                        default: {},
-                        options: [
-                            {
-                                displayName: 'Safety Setting',
-                                name: 'settings',
-                                values: [
-                                    {
-                                        displayName: 'Harm Category',
-                                        name: 'category',
-                                        type: 'options',
-                                        options: [
-                                            {
-                                                name: "HARM_CATEGORY_UNSPECIFIED",
-                                                value: "HARM_CATEGORY_UNSPECIFIED",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_HATE_SPEECH",
-                                                value: "HARM_CATEGORY_HATE_SPEECH",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_DANGEROUS_CONTENT",
-                                                value: "HARM_CATEGORY_DANGEROUS_CONTENT",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_HARASSMENT",
-                                                value: "HARM_CATEGORY_HARASSMENT",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                                                value: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_CIVIC_INTEGRITY",
-                                                value: "HARM_CATEGORY_CIVIC_INTEGRITY",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_IMAGE_HATE",
-                                                value: "HARM_CATEGORY_IMAGE_HATE",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT",
-                                                value: "HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_IMAGE_HARASSMENT",
-                                                value: "HARM_CATEGORY_IMAGE_HARASSMENT",
-                                            },
-                                            {
-                                                name: "HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT",
-                                                value: "HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT",
-                                            }
-                                        ],
-                                        default: 'HARM_CATEGORY_UNSPECIFIED',
-                                        description: 'The category of the harm content that the model is protected against.',
-                                    },
-                                    {
-                                        displayName: 'Harm Block Threshold',
-                                        name: 'threshold',
-                                        type: 'options',
-                                        options: [
-                                            {
-                                                name: 'HARM_BLOCK_THRESHOLD_UNSPECIFIED',
-                                                value: 'HARM_BLOCK_THRESHOLD_UNSPECIFIED',
-                                            },
-                                            {
-                                                name: 'BLOCK_LOW_AND_ABOVE',
-                                                value: 'BLOCK_LOW_AND_ABOVE',
-                                            },
-                                            {
-                                                name: 'BLOCK_MEDIUM_AND_ABOVE',
-                                                value: 'BLOCK_MEDIUM_AND_ABOVE',
-                                            },
-                                            {
-                                                name: 'BLOCK_ONLY_HIGH',
-                                                value: 'BLOCK_ONLY_HIGH',
-                                            },
-                                            {
-                                                name: 'BLOCK_NONE',
-                                                value: 'BLOCK_NONE',
-                                            },
-                                            {
-                                                name: 'OFF',
-                                                value: 'OFF',
-                                            }
-                                        ],
-                                        default: 'BLOCK_NONE',
-                                        description: 'The threshold for blocking content.',
-                                    }
-                                ]
-                            }
-                        ]
+                        displayName: 'Top K',
+                        name: 'topK',
+                        type: 'number',
+                        default: 1,
+                        description: 'For each token selection step, the ``top_k`` tokens with the highest probabilities are sampled. Then tokens are further filtered based on ``top_p`` with the final token selected using temperature sampling. Use a lower number for less random responses and a higher number for more random responses.',
+                    },
+                    {
+                        displayName: 'Top P',
+                        name: 'topP',
+                        type: 'number',
+                        default: 1,
+                        description: 'Tokens are selected from the most to least probable until the sum of their probabilities equals this value. Use a lower value for less random responses and a higher value for more random responses.',
                     }
                 ]
             }
