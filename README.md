@@ -1,55 +1,111 @@
-![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
+# n8n-nodes-gemini
 
-# n8n-nodes-starter
+<p align="center">
+  <img src="./nodes/Gemini/Gemini.light.svg" alt="Gemini Logo" width="125" height="125">
+</p>
 
-This repo contains example nodes to help you get started building your own custom integrations for [n8n](https://n8n.io). It includes the node linter and other dependencies.
+<p align="center">
+  <b>Integrate Google Gemini AI into your n8n workflows</b>
+</p>
 
-To make your custom node available to the community, you must create it as an npm package, and [submit it to the npm registry](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry).
+<p align="center">
+  <a href="https://www.npmjs.com/package/@raisaroj/n8n-nodes-gemini"><img src="https://img.shields.io/npm/v/@raisaroj/n8n-nodes-gemini.svg?color=brightgreen" alt="NPM Version"></a>
+  <a href="https://github.com/dioveath/n8n-nodes-gemini/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+</p>
 
-## Prerequisites
+## Overview
 
-You need the following installed on your development machine:
+This package provides n8n nodes for integrating Google Gemini AI into your workflows. It offers enhanced features like multi-API key support and improved stability through retries for empty responses.
 
-* [git](https://git-scm.com/downloads)
-* Node.js and pnpm. Minimum version Node 20. You can find instructions on how to install both using nvm (Node Version Manager) for Linux, Mac, and WSL [here](https://github.com/nvm-sh/nvm). For Windows users, refer to Microsoft's guide to [Install NodeJS on Windows](https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-windows).
-* Install n8n with:
-  ```
-  npm install n8n -g
-  ```
-* Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
+## Features
 
-## Using this starter
+- 🔑 **Multi-API Key Support**: Distribute API calls across multiple keys to avoid rate limits
+- 🔄 **Improved Stability**: Handles empty responses gracefully with retry mechanisms
+- 🛠️ **Advanced Configuration**: Fine-tune model parameters including temperature, top-k, top-p, and more
+- 🔒 **Safety Settings**: Configure content filtering with customizable safety thresholds
 
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
+## Installation
 
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
-   ```
-   git clone https://github.com/<your organization>/<your-repo-name>.git
-   ```
-3. Run `pnpm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Change the repository name in the `.env` file:
-   ```
-   REPO_NAME=your-custom-repo-name
-   ```
-8. Run `pnpm lint` to check for errors or `pnpm lintfix` to automatically fix errors when possible.
-9. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-10. To deploy and test your nodes with Docker, run:
-    ```
-    pnpm run deploy
-    ```
-    This will compile TypeScript, build icons, and start the Docker containers defined in `docker-compose.yml`.
-11. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-12. Update the LICENSE file to use your details.
-13. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
+### Community Nodes (Recommended)
 
-## More information
+For users with n8n v0.187+, you can install via the Community Nodes panel in your n8n instance:
 
-Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
+1. Open your n8n instance
+2. Go to **Settings** > **Community Nodes**
+3. Type "@raisaroj/n8n-nodes-gemini"
+4. Click **Install**
+
+## Usage
+
+### Authentication
+
+1. Obtain a Google Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. In n8n, create a new credential of type **GeminiAPI Key API**
+3. Enter your API key
+
+### Basic Text Generation
+
+1. Add a **Gemini** node to your workflow
+2. Select the **Text** resource and **Generate Text** operation
+3. Choose a model (e.g., `gemini-1.5-pro`)
+4. Add your messages in the conversation format
+5. Configure additional options as needed
+
+### Using Multiple API Keys
+
+1. Enable **Round Robin Keys** in the node configuration
+2. Add additional API keys in the **Additional API Keys** section
+3. The node will automatically distribute requests across all provided keys
+
+## Configuration Options
+
+### Model Parameters
+
+- **Temperature**: Controls randomness (0-2)
+- **Max Output Tokens**: Limits response length
+- **Top K**: Number of highest probability tokens to consider
+- **Top P**: Cumulative probability threshold for token selection
+- **Frequency Penalty**: Reduces repetition of tokens
+- **Presence Penalty**: Encourages use of new tokens
+
+### Safety Settings
+
+Configure content filtering across multiple harm categories:
+
+- Harassment
+- Hate Speech
+- Sexually Explicit Content
+- Dangerous Content
+- And more
+
+## Empty Responses
+
+If you encounter empty responses, try:
+
+1. Simplifying your prompt
+2. Using a different model
+3. Enabling the retry mechanism in n8n-workflow settings
+
+### Rate Limiting
+
+If you hit rate limits:
+
+1. Enable **Round Robin Keys** and add multiple API keys
+2. Implement delay nodes between Gemini API calls
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Author
+
+- **rAi** - [GitHub](https://github.com/dioveath)
+
+## Acknowledgements
+
+- [Google Gemini API](https://ai.google.dev/gemini-api/docs)
+- [n8n Community](https://community.n8n.io/)
